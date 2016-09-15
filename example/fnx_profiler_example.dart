@@ -7,17 +7,17 @@ import 'package:fnx_profiler/fnx_profiler.dart' as p;
 main() async {
 
   // open the root profiler, father of all
-  p.Profiler root = p.beginRootProfiler("root");
+  p.Profiler root = p.openRootProfiler("root");
 
   // do something expensive
   await createDelayFuture(50);
 
   for (int a=0; a<10; a++) {
     // open child profiler
-    p.Profiler child = root.begin("myFunction");
+    p.Profiler child = root.openChild("myFunction");
     await createDelayFuture(40);
     // close it after execution
-    child.end();
+    child.close();
   }
 
   for (int a=0; a<10; a++) {
@@ -26,19 +26,19 @@ main() async {
   }
 
   for (int a=0; a<3; a++) {
-    p.Profiler child = root.begin("child${a}");
+    p.Profiler child = root.openChild("child${a}");
     for (int b=0; b<5; b++) {
       // nest your profilers as needed and drill down to the bottleneck
-      p.Profiler grandChild = child.begin("grandchild");
+      p.Profiler grandChild = child.openChild("grandchild");
       await new Future.delayed(new Duration(milliseconds: 20));
       // just remember to close them
-      grandChild.end();
+      grandChild.close();
     }
-    child.end();
+    child.close();
   }
 
   // close profiler
-  root.end();
+  root.close();
 
   // print results, find the bottleneck, optimize, repeat!
   p.printProfilerStats();

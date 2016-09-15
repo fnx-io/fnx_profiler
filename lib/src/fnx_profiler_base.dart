@@ -4,7 +4,10 @@ bool profilerExceptions = true;
 
 Map<String, _ProfilerStats> _stats = {};
 
-Profiler beginRootProfiler(String name) {
+/// This is the entrypoint for your profiling.
+///
+/// Open new root profiler and than add children to it.
+Profiler openRootProfiler(String name) {
   return new Profiler._(name, null);
 }
 
@@ -17,9 +20,9 @@ void printProfilerStats() {
   maxNameLength += 1;
 
   StringBuffer sb = new StringBuffer();
-  sb.write("calls".padRight(maxNameLength));
+  sb.write("name".padRight(maxNameLength));
   sb.write("|");
-  sb.write("count".padLeft(10));
+  sb.write("calls".padLeft(10));
   sb.write("|");
   sb.write("avg (ms)".padLeft(10));
   sb.write("|");
@@ -73,8 +76,8 @@ class Profiler {
   }
 
   /// Mark the end of profiled block. Stats are created at this point
-  /// if you miss some stats results, maybe you didn't end your profiler?
-  void end() {
+  /// if you miss some stats results, maybe you didn't close your profiler?
+  void close() {
     if (_closed && profilerExceptions) {
       throw "Profiler '${this}' is already closed";
     }
@@ -93,22 +96,23 @@ class Profiler {
   }
 
   /// Create a new nested profiler. Don't forget to close it at the end of the block
-  /// with end() method.
-  Profiler begin(String name) {
+  /// with close() method.
+  Profiler openChild(String name) {
     Profiler child = new Profiler._(name, this);
     _children.add(child);
     return child;
   }
 
-  /// Helper method to profile duration of a Future.
-  /// Returns Future with the same value as the wrapped one.
+  /// Helper method to profile a Future.
+  /// Returns Future with the same value as the wrapped one, exceptions
+  /// stay untouched.
   Future profileFuture(String name, Future future) async {
-    Profiler child = begin(name);
+    Profiler child = openChild(name);
     var futureResult;
     try {
       futureResult = await future;
     } finally {
-      child.end();
+      child.close();
     }
     return futureResult;
   }

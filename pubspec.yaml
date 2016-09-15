@@ -1,8 +1,8 @@
 name: fnx_profiler
-description: A starting point for Dart libraries or applications.
-version: 0.0.1
-#author: Tomucha <email@example.com>
-#homepage: https://www.example.com
+description: Imperative profiler for Dart applications.
+version: 0.9.0
+author: Tomáš Zvěřina <tomucha@gmail.com>
+homepage: https://github.com/fnx-io/fnx_profiler
 
 environment:
   sdk: '>=1.0.0 <2.0.0'
