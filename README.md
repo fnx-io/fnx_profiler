@@ -11,26 +11,26 @@ Use it like this:
 
     import 'package:fnx_profiler/fnx_profiler.dart'
 
-    Profiler p = beginRootProfiler("root");
+    Profiler p = openRootProfiler("root");
     // do something expensive
-    p.end();
+    p.close();
     printProfilerStats();
 
 Or this:
 
-    Profiler p = beginRootProfiler("root");
+    Profiler p = openRootProfiler("root");
     for (int a=0; a<3; a++) {
-        Profiler ch = p.begin("child");
+        Profiler ch = p.openChild("child");
         // do something nested
-        ch.end();
+        ch.close();
     }
-    p.end();
+    p.close();
 
 Or even this:
 
-    Profiler p = beginRootProfiler("root");
+    Profiler p = openRootProfiler("root");
     await p.profileFuture("future", someFuture);
-    p.end();
+    p.close();
 
 Yes, it's pretty straightforward, even naive, but it works. Run your code,
 check the results at the end, find the bottleneck, optimize and repeat.

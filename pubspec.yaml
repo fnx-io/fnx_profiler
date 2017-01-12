@@ -1,6 +1,6 @@
 name: fnx_profiler
 description: Imperative profiler for Dart applications.
-version: 0.9.0
+version: 0.9.1
 author: Tomáš Zvěřina <tomucha@gmail.com>
 homepage: https://github.com/fnx-io/fnx_profiler
 
