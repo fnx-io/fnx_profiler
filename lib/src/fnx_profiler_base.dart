@@ -4,6 +4,9 @@ bool profilerExceptions = true;
 
 Map<String, _ProfilerStats> _stats = {};
 
+/// Clears the profiler stats.
+void clearProfiler => _stats.clear();
+
 /// This is the entrypoint for your profiling.
 ///
 /// Open new root profiler and than add children to it.
